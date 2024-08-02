@@ -1,0 +1,56 @@
+.commentSection {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.reviewCard {
+    margin: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.reviewCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reviewCard .MuiCardHeader-root {
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+.reviewCard .MuiCardContent-root {
+    background-color: #fff;
+}
+
+.MuiBottomNavigationAction-root:hover {
+    background-color: rgba(0, 0, 0, 0.08); /* Slight background change on hover */
+}
+.commentSection {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.reviewCard {
+    margin: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.reviewCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reviewCard .MuiCardHeader-root {
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+.reviewCard .MuiCardContent-root {
+    background-color: #fff;
+}
+
+
+
+.MuiBottomNavigationAction-root:hover {
+    background-color: rgba(0, 0, 0, 0.08); /* Slight background change on hover */
+}

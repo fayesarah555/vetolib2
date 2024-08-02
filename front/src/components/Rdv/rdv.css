@@ -1,0 +1,28 @@
+.rdvContainer {
+    padding: 20px;
+}
+
+.rdvTitle {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.rdvCard {
+    transition: transform 0.2s;
+}
+
+.rdvCard:hover {
+    transform: scale(1.05);
+}
+
+.upcoming {
+    border-left: 5px solid green;
+}
+
+.past {
+    border-left: 5px solid red;
+}
+
+.MuiCardHeader-avatar {
+    margin-right: 16px;
+}
