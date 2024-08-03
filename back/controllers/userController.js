@@ -30,20 +30,30 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// Register a new user
+
 exports.register = async (req, res) => {
   const { username, password, email, role } = req.body;
+  
   try {
+    // Hash the password using bcrypt
+    const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Insert the new user into the database
     const [result] = await pool.query(
       'INSERT INTO Users (username, password, email, role) VALUES (?, ?, ?, ?)',
       [username, hashedPassword, email, role]
     );
-    res.json({ user_id: result.insertId, username, email, role });
+
+    // Respond with the created user's details
+    res.status(201).json({ user_id: result.insertId, username, email, role });
+    
   } catch (err) {
+    // Catch any errors and respond with a 500 status code
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Login user
 exports.login = async (req, res) => {
@@ -52,7 +62,7 @@ exports.login = async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM Users WHERE username = ?', [username]);
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: 'Invalid username ' });
     }
 
     const user = rows[0];
@@ -60,7 +70,7 @@ exports.login = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+      return res.status(401).json({ error: 'Invalid  password' });
     }
 
     const token = jwt.sign({ user_id: user.user_id, username: user.username, role: user.role }, jwtSecret, {

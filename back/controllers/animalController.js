@@ -10,14 +10,29 @@ exports.getAllAnimals = async (req, res) => {
 };
 
 exports.createAnimal = async (req, res) => {
-  const { owner_id, name, species, breed, date_of_birth, gender, microchip_number } = req.body;
+  const { user_id, name, species, breed, date_of_birth, gender, microchip_number } = req.body;
+
+  // Log incoming request data
+  console.log('Received createAnimal request with data:', req.body);
+
   try {
+    // Validate the gender
+    if (!['male', 'female'].includes(gender)) {
+      return res.status(400).json({ error: 'Invalid gender value' });
+    }
+
+    // Insert animal into the database
     const [result] = await pool.query(
-      'INSERT INTO Animals (owner_id, name, species, breed, date_of_birth, gender, microchip_number) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [owner_id, name, species, breed, date_of_birth, gender, microchip_number]
+      'INSERT INTO Animals (user_id, name, species, breed, date_of_birth, gender, microchip_number) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [user_id, name, species, breed, date_of_birth, gender, microchip_number]
     );
+
+    // Respond with the inserted ID
     res.json({ id: result.insertId });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // Log the error for debugging
+    console.error('Error creating animal:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+

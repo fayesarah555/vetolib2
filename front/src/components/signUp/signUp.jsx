@@ -3,11 +3,9 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -19,7 +17,14 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
     const [role, setRole] = React.useState('');
-    const [animalNames, setAnimalNames] = React.useState(['']);
+    const [animalDetails, setAnimalDetails] = React.useState([{
+        name: '',
+        species: '',
+        breed: '',
+        date_of_birth: '',
+        gender: '',
+    }]);
+    const [showAddAnimalButton, setShowAddAnimalButton] = React.useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -27,7 +32,7 @@ export default function SignUp() {
         const data = new FormData(event.currentTarget);
 
         const userData = {
-            username: data.get('username'), // Added username
+            username: data.get('username'),
             firstName: data.get('firstName'),
             lastName: data.get('lastName'),
             email: data.get('email'),
@@ -36,32 +41,31 @@ export default function SignUp() {
         };
 
         try {
-            // Send POST request to the backend for user registration
             const response = await axios.post('http://localhost:3000/users', userData);
-            
+
             if (role === 'owner') {
-                // Handle additional animal registration if role is 'owner'
-                const animalData = animalNames
-                    .filter(name => name) // Filter out empty names
-                    .map(name => ({
-                        owner_id: response.data.id, // Use the newly created user ID
-                        name: name,
-                        species: 'Unknown', // Default values or add additional fields
-                        breed: 'Unknown',
-                        date_of_birth: new Date().toISOString().slice(0, 10), // Default to today
-                        gender: 'Unknown',
-                        microchip_number: 'Unknown',
+                const validAnimalDetails = animalDetails.filter(animal => 
+                    animal.name && animal.species && animal.gender // Ensures these fields are not empty
+                );
+
+                if (validAnimalDetails.length > 0) {
+                    const animalData = validAnimalDetails.map(animal => ({
+                        owner_id: response.data.user_id, // User ID from registration response
+                        name: animal.name,
+                        species: animal.species,
+                        breed: animal.breed,
+                        date_of_birth: animal.date_of_birth,
+                        gender: animal.gender,
+                        microchip_number: 'Unknown', // Or any other default value
                     }));
 
-                // Register animals
-                await Promise.all(animalData.map(animal => axios.post('http://localhost:3000/animals/create', animal)));
+                    await Promise.all(animalData.map(animal => axios.post('http://localhost:3000/animals/create', animal)));
+                }
             }
 
-            // Redirect to another page after successful registration
             navigate('/home');
         } catch (error) {
             console.error('Registration failed:', error.response ? error.response.data : error.message);
-            // Optionally show an error message to the user
         }
     };
 
@@ -69,13 +73,23 @@ export default function SignUp() {
         setRole(event.target.value);
     };
 
-    const handleAnimalChange = (index, event) => {
-        const newAnimalNames = [...animalNames];
-        newAnimalNames[index] = event.target.value;
-        setAnimalNames(newAnimalNames);
+    const handleAnimalChange = (index, field, value) => {
+        const newAnimalDetails = [...animalDetails];
+        newAnimalDetails[index][field] = value;
+        setAnimalDetails(newAnimalDetails);
 
-        if (index === animalNames.length - 1 && event.target.value) {
-            setAnimalNames([...animalNames, '']);
+        // Check if the current form is filled
+        const isCurrentFormFilled = Object.values(newAnimalDetails[index]).every(val => val !== '');
+        // Show "Add Another Animal" button if the form is filled
+        setShowAddAnimalButton(isCurrentFormFilled);
+    };
+
+    const handleAddAnimal = () => {
+        if (animalDetails.every(animal => 
+            Object.values(animal).every(val => val !== '')
+        )) {
+            setAnimalDetails([...animalDetails, { name: '', species: '', breed: '', date_of_birth: '', gender: '' }]);
+            setShowAddAnimalButton(false); // Hide button until the new form is filled
         }
     };
 
@@ -169,61 +183,96 @@ export default function SignUp() {
                             </Grid>
                             {role === 'owner' && (
                                 <>
-                                    {animalNames.map((name, index) => (
-                                        <Grid item xs={12} key={index}>
-                                            <TextField
-                                                fullWidth
-                                                name={`animal-${index}`}
-                                                label="Nom de votre animal de compagnie"
-                                                type="text"
-                                                value={name}
-                                                onChange={(event) => handleAnimalChange(index, event)}
-                                                autoComplete="animal-name"
-                                            />
-                                        </Grid>
+                                    {animalDetails.map((animal, index) => (
+                                        <React.Fragment key={index}>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Nom de votre animal de compagnie"
+                                                    value={animal.name}
+                                                    onChange={(event) => handleAnimalChange(index, 'name', event.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Espèce"
+                                                    value={animal.species}
+                                                    onChange={(event) => handleAnimalChange(index, 'species', event.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Race"
+                                                    value={animal.breed}
+                                                    onChange={(event) => handleAnimalChange(index, 'breed', event.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    label="Date de naissance"
+                                                    type="date"
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    value={animal.date_of_birth}
+                                                    onChange={(event) => handleAnimalChange(index, 'date_of_birth', event.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    select
+                                                    fullWidth
+                                                    label="Genre"
+                                                    value={animal.gender}
+                                                    onChange={(event) => handleAnimalChange(index, 'gender', event.target.value)}
+                                                    SelectProps={{
+                                                        native: true,
+                                                    }}
+                                                >
+                                                    <option value="">Sélectionnez le genre</option>
+                                                    <option value="male">Mâle</option>
+                                                    <option value="female">Femelle</option>
+                                                </TextField>
+                                            </Grid>
+                                        </React.Fragment>
                                     ))}
+                                    {showAddAnimalButton && (
+                                        <Grid item xs={12}>
+                                            <Button
+                                                fullWidth
+                                                variant="outlined"
+                                                onClick={handleAddAnimal}
+                                            >
+                                                Ajouter un autre animal
+                                            </Button>
+                                        </Grid>
+                                    )}
                                 </>
                             )}
                             <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="Je veux recevoir des inspirations, des promotions marketing et des mises à jour par e-mail."
-                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{ mt: 3, mb: 2 }}
+                                >
+                                    {role === 'owner' ? "Suivant" : "S'inscrire"}
+                                </Button>
                             </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            {role === 'owner' ? "Suivant" : "S'inscrire"}
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link to={"/SignIn"} variant="body2">
-                                    Vous avez déjà un compte ? Se connecter
-                                </Link>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                    <Link to="/SignIn" variant="body2">
+                                        Vous avez déjà un compte ? Se connecter
+                                    </Link>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
             </Container>
         </ThemeProvider>
-    );
-}
-
-// Copyright component to display at the bottom
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Votre site web
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
     );
 }
