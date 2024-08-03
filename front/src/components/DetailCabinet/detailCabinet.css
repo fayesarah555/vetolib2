@@ -1,0 +1,37 @@
+.cabinet-detail-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: auto;
+    position: relative;
+}
+
+.cabinet-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.cabinet-bio {
+    margin-top: 10px;
+}
+
+.switch {
+    margin-bottom: 20px;
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+@media (max-width: 600px) {
+    .cabinet-detail-container {
+        padding: 10px;
+    }
+}

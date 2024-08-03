@@ -1,0 +1,29 @@
+/* BottomNavBar styles */
+
+.bottomNavBar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 1000; /* Ensure it is on top of other elements */
+    background-color: #fff; /* Background color of the Bottom Navigation */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for better visibility */
+}
+
+/* Styling for the BottomNavigationAction */
+.bottomNavBar .MuiBottomNavigationAction-root {
+    color: #757575; /* Default icon and text color */
+}
+
+.bottomNavBar .MuiBottomNavigationAction-root:hover {
+    background-color: rgba(0, 0, 0, 0.08); /* Slight background change on hover */
+}
+
+/* Styling for the selected BottomNavigationAction */
+.bottomNavBar .Mui-selected {
+    color: #ff5722 !important; /* Change color to your desired active color */
+}
+
+/* Optional: Additional hover effect for the entire BottomNavigationAction */
+.bottomNavBar .MuiBottomNavigationAction-root.Mui-selected {
+    background-color: rgba(255, 87, 34, 0.1); /* Light background color for selected item */
+}
