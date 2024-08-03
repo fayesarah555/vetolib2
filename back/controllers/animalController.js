@@ -12,8 +12,8 @@ exports.getAllAnimals = async (req, res) => {
 exports.createAnimal = async (req, res) => {
   const { user_id, name, species, breed, date_of_birth, gender, microchip_number } = req.body;
 
-  // Log incoming request data
-  console.log('Received createAnimal request with data:', req.body);
+  
+  // console.log('Received createAnimal request with data:', req.body);
 
   try {
     // Validate the gender

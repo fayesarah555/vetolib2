@@ -50,7 +50,7 @@ export default function SignUp() {
 
                 if (validAnimalDetails.length > 0) {
                     const animalData = validAnimalDetails.map(animal => ({
-                        owner_id: response.data.user_id, // User ID from registration response
+                        user_id: response.data.user_id, // User ID from registration response
                         name: animal.name,
                         species: animal.species,
                         breed: animal.breed,

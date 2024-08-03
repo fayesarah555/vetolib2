@@ -57,28 +57,38 @@ exports.register = async (req, res) => {
 
 // Login user
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const [rows] = await pool.query('SELECT * FROM Users WHERE username = ?', [username]);
+    console.log('Received login request with data:', req.body);
+
+    // Query the database for the user by email
+    const [rows] = await pool.query('SELECT * FROM Users WHERE email = ?', [email]);
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid username ' });
+      console.log('User not found');
+      return res.status(401).json({ error: 'Invalid email' });
     }
 
     const user = rows[0];
 
+    // Check if the password matches
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ error: 'Invalid  password' });
+      console.log('Password mismatch');
+      return res.status(401).json({ error: 'Invalid password' });
     }
 
-    const token = jwt.sign({ user_id: user.user_id, username: user.username, role: user.role }, jwtSecret, {
-      expiresIn: '1h',
-    });
+    // Generate JWT token
+    const token = jwt.sign(
+      { user_id: user.user_id, username: user.username, role: user.role },
+      jwtSecret,
+      { expiresIn: '1h' }
+    );
 
     res.json({ token, user_id: user.user_id, username: user.username, role: user.role });
   } catch (err) {
+    console.error('Error during login:', err.message);
     res.status(500).json({ error: err.message });
   }
 };

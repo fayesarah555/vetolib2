@@ -30,7 +30,7 @@ export default function SignIn() {
 
         try {
             // Send POST request to the backend
-            const response = await axios.post('http://localhost:3000/login', loginData);
+            const response = await axios.post('http://localhost:3000/users/login', loginData);
 
             if (response.status === 200) {
                 // Handle successful login, e.g., save token, redirect user
