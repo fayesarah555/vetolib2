@@ -1,5 +1,5 @@
 const express = require('express');
-
+const cors = require('cors');
 const usersRoute = require('./routes/users');
 const ownersRoute = require('./routes/owners');
 const animalsRoute = require('./routes/animals');
@@ -9,6 +9,13 @@ const medicalRecordsRoute = require('./routes/medicalRecords');
 const medicationsRoute = require('./routes/medications');
 
 const app = express();
+const corsOptions = {
+  origin: 'http://localhost:5173', // Allow only this origin
+  methods: 'GET,POST,PUT,DELETE', // Allow specific HTTP methods
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use('/users', usersRoute);

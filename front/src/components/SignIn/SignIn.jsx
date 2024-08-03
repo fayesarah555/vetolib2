@@ -1,4 +1,4 @@
-import React from 'react';
+import  { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,6 +17,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,7 +30,7 @@ export default function SignIn() {
 
         try {
             // Send POST request to the backend
-            const response = await axios.post('http://localhost:3000/register', loginData);
+            const response = await axios.post('http://localhost:3000/login', loginData);
 
             if (response.status === 200) {
                 // Handle successful login, e.g., save token, redirect user
@@ -40,7 +41,8 @@ export default function SignIn() {
             }
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
-            // Optionally show an error message to the user
+            // Show an error message to the user
+            setErrorMessage('Login failed. Please check your credentials and try again.');
         }
     };
 
@@ -83,6 +85,11 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
+                        {errorMessage && (
+                            <Typography color="error" variant="body2" align="center">
+                                {errorMessage}
+                            </Typography>
+                        )}
                         <Button
                             type="submit"
                             fullWidth
@@ -93,7 +100,7 @@ export default function SignIn() {
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link to={"/"} variant="body2">
+                                <Link to="/signup" variant="body2">
                                     {"Vous n'avez pas de compte ? S'inscrire"}
                                 </Link>
                             </Grid>
@@ -110,12 +117,12 @@ export default function SignIn() {
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {/* {'Copyright © '}
+            {'Copyright © '}
             <Link color="inherit" to="/">
                 VetoLib
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'} */}
+            {'.'}
         </Typography>
     );
 }
