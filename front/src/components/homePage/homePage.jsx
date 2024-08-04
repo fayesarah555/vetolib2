@@ -18,6 +18,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './homePage.css';
+import Petgif from '../../../public/petgif.gif'
 
 export default function HomePage() {
     const [expanded, setExpanded] = useState(false);
@@ -42,7 +43,7 @@ export default function HomePage() {
         navigate('/detaille_Cabinet');
     };
 
-    if (!vetData.length) return <div>Loading...</div>;
+    // if (!vetData.length) return <div>Loading...</div>;
 
     return (
         <>
@@ -67,6 +68,11 @@ export default function HomePage() {
                         Facilitez l'accès aux soins vétérinaires
                     </Typography>
                 </Box>
+                <img
+                src={Petgif}
+                alt="Pet Gif"
+                style={{ width: '300px', height: 'auto' }} // Ajustez les dimensions selon vos besoins
+                />
                 <Grid container spacing={2} className="homeContent">
                     <Grid item xs={12} className="section">
                         <Typography variant="h3">Notre Mission</Typography>
