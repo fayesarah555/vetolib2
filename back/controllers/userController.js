@@ -6,6 +6,25 @@ const saltRounds = 10; // Salt rounds for bcrypt
 const jwtSecret = 'your_jwt_secret'; // Secret for JWT, should be stored securely
 
 
+exports.getUserByRole = async (req, res) => {
+  try {
+    // Fetch all users with the role of 'veterinarian'
+    const [rows] = await pool.query('SELECT * FROM Users WHERE role = ?', ['veterinarian']);
+    
+    // If no veterinarians are found, return an appropriate message
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No veterinarians found' });
+    }
+    
+    // Return the list of veterinarians
+    res.json(rows);
+  } catch (err) {
+    // Handle any errors that occur during the query
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 // Get user by ID
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
