@@ -35,9 +35,14 @@ export default function SignIn() {
             if (response.status === 200) {
                 // Handle successful login, e.g., save token, redirect user
                 console.log('Login successful:', response.data);
+    
 
-                // Redirect to another page, e.g., home page
-                navigate('/home');
+                // Store user data in state or localStorage
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user_id', response.data.user_id);
+          
+                // Redirect to User page
+                navigate(`/User/${response.data.user_id}`);
             }
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
@@ -100,7 +105,7 @@ export default function SignIn() {
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link to="/signup" variant="body2">
+                                <Link to="/" variant="body2">
                                     {"Vous n'avez pas de compte ? S'inscrire"}
                                 </Link>
                             </Grid>

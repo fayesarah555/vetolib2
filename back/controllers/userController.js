@@ -5,6 +5,21 @@ const pool = require('../config/db');
 const saltRounds = 10; // Salt rounds for bcrypt
 const jwtSecret = 'your_jwt_secret'; // Secret for JWT, should be stored securely
 
+
+// Get user by ID
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await pool.query('SELECT * FROM Users WHERE user_id = ?', [id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get all users
 exports.getAllUsers = async (req, res) => {
   try {

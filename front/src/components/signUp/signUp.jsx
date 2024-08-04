@@ -63,7 +63,7 @@ export default function SignUp() {
                 }
             }
 
-            navigate('/home');
+            navigate('/user');
         } catch (error) {
             console.error('Registration failed:', error.response ? error.response.data : error.message);
         }
