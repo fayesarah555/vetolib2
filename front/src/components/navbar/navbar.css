@@ -1,3 +1,27 @@
-.AppBar{
-    width: 100%;
+/* navbar.css */
+
+.app-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.pets-icon {
+    margin-right: 8px;
+}
+
+.menu-items {
+    display: flex;
+    gap: 16px;
+}
+
+.menu-items a {
+    color: white;
+    text-decoration: none;
+}
+
+@media (max-width: 600px) {
+    .menu-items {
+        display: none;
+    }
 }

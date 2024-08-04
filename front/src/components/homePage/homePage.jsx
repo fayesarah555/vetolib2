@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -26,13 +26,12 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:3000/users/role/veterinarian')
+        axios.get('http://localhost:3000/veterinarians')
             .then(response => {
                 setVetData(response.data);
-                console.log(response.data); // This will contain the list of veterinarians
             })
             .catch(error => {
-                console.error('Error fetching veterinarians:', error);
+                console.error('There was an error fetching the data!', error);
             });
     }, []);
 
@@ -43,6 +42,8 @@ export default function HomePage() {
     const handleClick = () => {
         navigate('/detaille_Cabinet');
     };
+
+    // if (!vetData.length) return <div>Loading...</div>;
 
     return (
         <>
@@ -55,7 +56,7 @@ export default function HomePage() {
                 noValidate
                 autoComplete="off"
             >
-                <TextField id="outlined-basic" label="Rechercher un vétérinaire" variant="outlined" />
+                <TextField id="outlined-basic" label="Outlined" variant="outlined" />
             </Box>
             <div className="homePage">
                 <img src='https://www.monchat.ca/wp-content/uploads/2020/02/fond-decran-blanc-avec-un-chien-et-un-chat-derriere-une-affiche-blanche.jpg' alt="Chien" className="homeImage" />
@@ -106,65 +107,63 @@ export default function HomePage() {
                             <strong>Accessibilité et Confiance</strong> : Nous croyons que chaque propriétaire d'animal mérite un accès facile et rapide aux soins vétérinaires. Nous nous engageons à créer une communauté de confiance où les avis des utilisateurs jouent un rôle clé dans l'amélioration des services.
                         </Typography>
                     </Grid>
-                </Grid>e
+                </Grid>
             </div>
             {vetData.map(vet => (
-                vet && (
-                    <Card key={vet.vet_id} className="Card" onClick={handleClick}>
-                        <CardHeader
-                            avatar={
-                                <Avatar aria-label="recipe" className="Avatar">
-                                    {(vet.first_name && vet.first_name.charAt(0)) || ''}{(vet.last_name && vet.last_name.charAt(0)) || ''}
-                                </Avatar>
-                            }
-                            action={
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon />
-                                </IconButton>
-                            }
-                            title={`${vet.first_name || ''} ${vet.last_name || ''}`}
-                            subheader={vet.specialization || 'Specialization not provided'}
-                        />
-                        <CardMedia
-                            component="img"
-                            height="194"
-                            image="https://cdn.futura-sciences.com/cdn-cgi/image/width=1024,quality=50,format=auto/sources/images/actu/esperance-vie-chiens-chiot-golden-retriever.jpg"
-                            alt="Vet"
-                        />
+                <Card key={vet.vet_id} className="Card" onClick={handleClick}>
+                    <CardHeader
+                        avatar={
+                            <Avatar aria-label="recipe" className="Avatar">
+                                {vet.first_name.charAt(0)}{vet.last_name.charAt(0)}
+                            </Avatar>
+                        }
+                        action={
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon />
+                            </IconButton>
+                        }
+                        title={`${vet.first_name} ${vet.last_name}`}
+                        subheader={vet.specialization}
+                    />
+                    <CardMedia
+                        component="img"
+                        height="194"
+                        image="https://cdn.futura-sciences.com/cdn-cgi/image/width=1024,quality=50,format=auto/sources/images/actu/esperance-vie-chiens-chiot-golden-retriever.jpg"
+                        alt="Vet"
+                    />
+                    <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                            Clinic Address: {vet.clinic_address}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            Phone: {vet.phone}
+                        </Typography>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                        <IconButton aria-label="add to favorites">
+                            <FavoriteIcon />
+                        </IconButton>
+                        <IconButton aria-label="share">
+                            <ShareIcon />
+                        </IconButton>
+                        <IconButton
+                            className={`ExpandMore ${expanded ? 'expanded' : ''}`}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreIcon />
+                        </IconButton>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
-                            <Typography variant="body2" color="text.secondary">
-                                {vet.role || 'Not provided'}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Nom: {vet.username || 'Not provided'}
+                            <Typography paragraph>About:</Typography>
+                            <Typography paragraph>
+                                This veterinarian specializes in {vet.specialization}. For more information, you can reach them at {vet.phone} or visit them at {vet.clinic_address}.
                             </Typography>
                         </CardContent>
-                        <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites">
-                                <FavoriteIcon />
-                            </IconButton>
-                            <IconButton aria-label="share">
-                                <ShareIcon />
-                            </IconButton>
-                            <IconButton
-                                className={`ExpandMore ${expanded ? 'expanded' : ''}`}
-                                onClick={handleExpandClick}
-                                aria-expanded={expanded}
-                                aria-label="show more"
-                            >
-                                <ExpandMoreIcon />
-                            </IconButton>
-                        </CardActions>
-                        <Collapse in={expanded} timeout="auto" unmountOnExit>
-                            <CardContent>
-                                <Typography paragraph>About:</Typography>
-                                <Typography paragraph>
-                                    This veterinarian specializes in {vet.specialization || 'a variety of services'}. For more information, you can reach them at {vet.phone || 'their phone'} or visit them at {vet.clinic_address || 'their clinic'}.
-                                </Typography>
-                            </CardContent>
-                        </Collapse>
-                    </Card>
-                )
+                    </Collapse>
+                </Card>
             ))}
         </>
     );
