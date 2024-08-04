@@ -9,6 +9,20 @@ exports.getAllVeterinarians = async (req, res) => {
   }
 };
 
+exports.getVeterinarianById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await pool.query('SELECT * FROM Veterinarians WHERE id = ?', [id]);
+    if (rows.length) {
+      res.json(rows[0]);
+    } else {
+      res.status(404).json({ error: 'Veterinarian not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 exports.createVeterinarian = async (req, res) => {
   const { user_id, first_name, last_name, specialization, phone, clinic_address } = req.body;
   try {

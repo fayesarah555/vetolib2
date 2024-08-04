@@ -35,3 +35,28 @@
         padding: 10px;
     }
 }
+/* detailCabinet.css */
+
+.cabinet-detail-container {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.cabinet-card {
+    width: 100%;
+    max-width: 800px;
+}
+
+.cabinet-bio {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.toggle-button {
+    margin-bottom: 16px;
+}
+
+.back-button {
+    margin-top: 16px;
+}

@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Typography, Grid, Box } from '@mui/material';
 import BottomNavBar from '../BottomNavBar/BottomNavBar';
 import axios from 'axios';
+
 import './user.css';
 
 const User = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -25,6 +26,11 @@ const User = () => {
   if (!userData) {
     return <div>Loading...</div>;
   }
+
+  const handleClick = () => {
+    navigate('/detaille_Animal');
+};
+
 
   return (
     <Box className="userDetailContainer">
@@ -64,7 +70,7 @@ const User = () => {
           </Card>
         </Grid>
         {/* Add logic to display user's pets if any */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4} onClick={handleClick}>
           <Card className="petCard">
             {/* Example Pet Details */}
             <CardMedia
