@@ -35,7 +35,7 @@ const User = () => {
               component="img"
               alt="User Avatar"
               height="140"
-              image={userData.avatar || 'default-avatar-url'}
+              image={userData.image || 'https://i.pinimg.com/564x/c1/d9/df/c1d9df923907435bf0bbc3e4a7e4ff89.jpg'}
               title="User Avatar"
               className="userAvatar"
             />
@@ -50,7 +50,7 @@ const User = () => {
                 {userData.bio || 'Bio not available'}
               </Typography>
               <hr></hr>
-              <Grid container spacing={2} className="userInfo">
+              {/* <Grid container spacing={2} className="userInfo">
                 <Grid item xs={12} md={6}>
                   <Typography variant="h6">Address</Typography>
                   <Typography>{userData.address || 'Address not available'}</Typography>
@@ -59,7 +59,7 @@ const User = () => {
                   <Typography variant="h6">Phone</Typography>
                   <Typography>{userData.phone || 'Phone not available'}</Typography>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </CardContent>
           </Card>
         </Grid>
@@ -70,9 +70,10 @@ const User = () => {
             <CardMedia
               component="img"
               alt="Pet Avatar"
-              image="pet-avatar-url"
+              image={ 'https://tse4.mm.bing.net/th?id=OIP.XjXJn2amUEzgJKWOUHCtIQHaNn&pid=Api&P=0&h=180'}
               title="Pet Avatar"
               className="petAvatar"
+              style={{ width: '140px', height: '180px',  borderRadius: '50%' }}
             />
             <CardContent>
               <Grid container spacing={2} className="petInfo">
