@@ -44,11 +44,6 @@ export default function HomePage() {
         navigate('/detaille_Cabinet');
     };
 
-<<<<<<< HEAD
-    // if (!vetData.length) return <div>Loading...</div>;
-
-=======
->>>>>>> da69f91874d3ef26f9d397d5328ad9c6d2594c60
     return (
         <>
             <Box
