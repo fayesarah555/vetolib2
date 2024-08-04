@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Duck from '../../../public/duck.gif'
 
 const defaultTheme = createTheme();
 
@@ -69,6 +70,11 @@ export default function SignIn() {
                     <Typography component="h1" variant="h5">
                         Se connecter
                     </Typography>
+                    <img
+                    src={Duck}
+                    alt="Pet Gif"
+                    style={{ width: '300px', height: 'auto' }} // Ajustez les dimensions selon vos besoins
+                    />
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <TextField
                             margin="normal"

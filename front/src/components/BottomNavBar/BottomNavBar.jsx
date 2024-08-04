@@ -10,9 +10,11 @@ const BottomNavBar = () => {
     const [value, setValue] = React.useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+    const userId = localStorage.getItem('user_id');
+
 
     useEffect(() => {
-        if (location.pathname === '/user') {
+        if (location.pathname === `/user/${userId}`){
             setValue(0);
         } else if (location.pathname === '/commentaire') {
             setValue(1);
@@ -24,7 +26,7 @@ const BottomNavBar = () => {
     const handleNavigation = (event, newValue) => {
         setValue(newValue);
         if (newValue === 0) {
-            navigate('/user');
+            navigate('/user/${userId}');
         } else if (newValue === 1) {
             navigate('/commentaire');
         } else if (newValue === 2) {

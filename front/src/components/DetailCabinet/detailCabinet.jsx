@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, Paper, Typography, Grid, Zoom, Card, CardContent, IconButton, Button } from '@mui/material';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './detailCabinet.css';
 
 export default function DetailCabinet() {
-    const { id } = useParams(); // Get the ID from the URL
-    const [cabinet, setCabinet] = useState(null);
+    const [cabinet, setCabinet] = useState({
+        name: 'Cabinet Vétérinaire Animaux Heureux',
+        email: 'contact@animauxheureux.com',
+        bio: 'Nous offrons des soins vétérinaires de qualité pour vos compagnons à quatre pattes. Notre équipe expérimentée est dédiée à la santé et au bien-être de vos animaux.',
+        address: '123 Rue des Animaux, 75000 Paris',
+        phone: '+33 1 23 45 67 89'
+    });
+    
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        axios.get(`http://localhost:3000/veterinarians/${id}`)
-            .then(response => {
-                setCabinet(response.data);
-            })
-            .catch(error => {
-                console.error('There was an error fetching the data!', error);
-            });
-    }, [id]);
 
     const handleChange = () => {
         setChecked((prev) => !prev);
@@ -28,8 +23,6 @@ export default function DetailCabinet() {
     const handleBack = () => {
         navigate(-1); // Navigate to the previous page
     };
-
-    if (!cabinet) return <div>Loading...</div>;
 
     return (
         <Box className="cabinet-detail-container">
