@@ -100,7 +100,7 @@ export default function HomePage() {
                             <strong>Accessibilité et Confiance</strong> : Nous croyons que chaque propriétaire d'animal mérite un accès facile et rapide aux soins vétérinaires. Nous nous engageons à créer une communauté de confiance où les avis des utilisateurs jouent un rôle clé dans l'amélioration des services.
                         </Typography>
                     </Grid>
-                </Grid>
+                </Grid>e
             </div>
             {vetData.map(vet => (
                 vet && (
